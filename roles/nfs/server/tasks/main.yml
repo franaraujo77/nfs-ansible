@@ -1,0 +1,8 @@
+---
+- name: Install NFS service
+  command:
+    cmd: "/root/nfs-install"
+
+- name: Install extras
+  command:
+    cmd: "/root/nfs-install-extras"
