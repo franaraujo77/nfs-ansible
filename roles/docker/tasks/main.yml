@@ -52,20 +52,27 @@
     group: docker
     mode: "{{ dockerRootPermission }}"
 
-- name: Stop docker services
+- name: Stop duplicati docker services
   shell:
-#    cmd: "docker-compose -f {{ dockerApps }}/{{ item }}/docker-compose.yaml down"
     cmd: "docker-compose -f {{ dockerApps }}/duplicati/docker-compose.yaml down"
   ignore_errors: true
   register: output
-#  with_fileglob: "{{ playbook_dir }}/roles/docker/files/*"
 
-- name: Start docker services
+- name: Start duplicati docker services
   shell:
-#    cmd: "docker-compose -f {{ dockerApps }}/{{ item }}/docker-compose.yaml up"
-    cmd: "nohup docker-compose -f {{ dockerApps }}/duplicati/docker-compose.yaml up </dev/null >/dev/null 2>&1 &"
+    cmd: "docker-compose -f {{ dockerApps }}/duplicati/docker-compose.yaml up -d "
   register: output
-#  with_fileglob: "{{ playbook_dir }}/roles/docker/files/*"
+
+- name: Stop filebrowser docker services
+  shell:
+    cmd: "docker-compose -f {{ dockerApps }}/filebrowser/docker-compose.yaml down"
+  ignore_errors: true
+  register: output
+
+- name: Start filebrowser docker services
+  shell:
+    cmd: "docker-compose -f {{ dockerApps }}/filebrowser/docker-compose.yaml up -d "
+  register: output
 
 - name: Show docker results
   ansible.builtin.debug:

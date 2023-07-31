@@ -1,0 +1,18 @@
+# https://hub.docker.com/r/filebrowser/filebrowser
+version: "3"
+
+services:
+  filebrowser:
+    image: filebrowser/filebrowser
+    user: "0:996"
+    ports:
+      - 8080:80
+    volumes:
+      - /docker/data/filebrowser/data:/data
+      - /docker/data/filebrowser/config:/config
+      - /export/nfsshare:/srv
+    environment:
+      - FB_BASEURL=/
+      - FB_USERNAME=filebrowserAdmin
+      - FB_ROOT=/srv/
+    restart: unless-stopped
