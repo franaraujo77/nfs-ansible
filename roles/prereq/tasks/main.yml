@@ -64,27 +64,23 @@
     validate: 'visudo -cf %s'
   when: ansible_os_family == "RedHat"
 
-- name: Install nfs-common From Apt-Get
-  become: yes
+- name: Update Package Cache (apt/Ubuntu)
+  tags: always
   apt:
-    name: nfs-common
-    state: present
     update_cache: yes
+  changed_when: false
+  when: ansible_distribution == "Ubuntu"
 
-- name: Install apt-transport-https From Apt-Get
-  become: yes
-  apt:
-    name: apt-transport-https
-    state: present
+- name: Update Package Cache (dnf/CentOS)
+  tags: always
+  dnf:
+    update_cache: yes
+  changed_when: false
+  when: ansible_distribution == "CentOS"
 
-- name: Install ca-certificates From Apt-Get
-  become: yes
-  apt:
-    name: ca-certificates
-    state: present
-
-- name: Install software-properties-common From Apt-Get
-  become: yes
-  apt:
-    name: software-properties-common
-    state: present
+- name: Update Package Cache (yum/Amazon)
+  tags: always
+  yum:
+    update_cache: yes
+  changed_when: false
+  when: ansible_distribution == "Amazon"

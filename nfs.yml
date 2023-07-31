@@ -5,9 +5,9 @@
   roles:
     - role: prereq
       become: true
-    - role: download_nfs
-      become: true
     - role: raspberrypi
       become: true
     - role: nfs/server
+      become: true
+    - role: docker
       become: true
