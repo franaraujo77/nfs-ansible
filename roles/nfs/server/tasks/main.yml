@@ -3,6 +3,8 @@
   package:
     name:
       - nfs-kernel-server
+      - rpcbind
+      - ufw
     state: latest
 
 - name: share directory exists
@@ -10,8 +12,8 @@
     path: "{{ mountShare }}"
     state: directory
     mode: "{{ mountSharePermission }}"
-    owner: root
-    group: root
+    owner: ksys
+    group: ksys
 
 - name: Mount up device by UUID
   ansible.posix.mount:
@@ -31,3 +33,15 @@
 
 - name: export share
   ansible.builtin.command: "exportfs -rav"
+
+- name: Configure ssh access
+  shell:
+    cmd: "ufw allow ssh "
+
+- name: Configure NFS access
+  shell:
+    cmd: "ufw allow from  {{ mountShareOrigin }} to any port nfs "
+
+- name: Enable UFW
+  shell:
+    cmd: "ufw enable "

@@ -11,7 +11,7 @@ services:
       - CLI_ARGS= #optional
     volumes:
       - /docker/data/duplicati/config:/config
-      - /export/nfsshare:/source
+      - /export:/source
     ports:
       - 8200:8200
     restart: unless-stopped

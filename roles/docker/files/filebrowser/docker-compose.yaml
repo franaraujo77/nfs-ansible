@@ -10,7 +10,7 @@ services:
     volumes:
       - /docker/data/filebrowser/data:/data
       - /docker/data/filebrowser/config:/config
-      - /export/nfsshare:/srv
+      - /export:/srv
     environment:
       - FB_BASEURL=/
       - FB_USERNAME=filebrowserAdmin
