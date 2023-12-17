@@ -7,6 +7,10 @@
       - ufw
     state: latest
 
+- name: Configure ssh access
+  shell:
+    cmd: "ufw allow ssh "
+
 - name: share directory exists
   ansible.builtin.file:
     path: "{{ mountShare }}"
@@ -34,14 +38,10 @@
 - name: export share
   ansible.builtin.command: "exportfs -rav"
 
-- name: Configure ssh access
-  shell:
-    cmd: "ufw allow ssh "
-
 - name: Configure NFS access
   shell:
     cmd: "ufw allow from  {{ mountShareOrigin }} to any port nfs "
 
 - name: Enable UFW
   shell:
-    cmd: "ufw enable "
+    cmd: "ufw --force enable"

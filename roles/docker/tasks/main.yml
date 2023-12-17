@@ -52,28 +52,26 @@
     group: docker
     mode: "{{ dockerRootPermission }}"
 
-- name: Stop duplicati docker services
-  shell:
-    cmd: "docker-compose -f {{ dockerApps }}/duplicati/docker-compose.yaml down"
+- name: Get docker-compose files on remote machine
+  shell: ls {{ dockerApps }}/*/docker-compose.yaml
+  register: docker_compose
+
+- name: Stop docker services
+  shell: "docker-compose -f {{ item }} down"
+  with_items: "{{ docker_compose.stdout_lines  }}"
   ignore_errors: true
   register: output
 
-- name: Start duplicati docker services
-  shell:
-    cmd: "docker-compose -f {{ dockerApps }}/duplicati/docker-compose.yaml up -d "
-  register: output
+- name: Show docker stop results
+  ansible.builtin.debug:
+    var: output
 
-- name: Stop filebrowser docker services
-  shell:
-    cmd: "docker-compose -f {{ dockerApps }}/filebrowser/docker-compose.yaml down"
+- name: Start docker services
+  shell: "docker-compose -f {{ item }} up -d"
+  with_items: "{{ docker_compose.stdout_lines  }}"
   ignore_errors: true
   register: output
 
-- name: Start filebrowser docker services
-  shell:
-    cmd: "docker-compose -f {{ dockerApps }}/filebrowser/docker-compose.yaml up -d "
-  register: output
-
-- name: Show docker results
+- name: Show docker start results
   ansible.builtin.debug:
     var: output

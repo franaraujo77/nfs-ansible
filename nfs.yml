@@ -1,5 +1,12 @@
 ---
 
+- name: misc task on ubuntu 18.04 instance
+  hosts: "*"
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+  tasks:
+    - debug: var=ansible_host
+
 - hosts: nfs_server
   gather_facts: yes
   roles:
